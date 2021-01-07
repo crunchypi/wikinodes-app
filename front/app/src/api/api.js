@@ -77,3 +77,16 @@ export async function nodeRand(amount) {
 }
 
 
+// # Check if nodes are connected, using list of ordered pairs
+// # which contain node titles. Result is a promise which is
+// # expected to contain a json with booleans for each ordered
+// # pair. Example (if promise is ok):
+// #    Input: [["a","b"], ["c", "d"]]
+// #    Output: [true, false]
+export async function checkNeighs(pairs) {
+    const endpoint = '/data/check/rels';
+    let resp = await axiosDefault.post(`${serverPath}${endpoint}`, {
+        pairs:pairs
+    })
+    return resp.data.resp
+}
