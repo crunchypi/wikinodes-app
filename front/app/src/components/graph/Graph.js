@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 
 import D3Graph from '../../graph/d3graph.js'
+import {newGraphFlat} from '../../graph/utils.js'
 
-export default class GraphExample extends Component {
+
+
+export default class Graph extends Component {
     state = {d3graph:null}
 
     componentDidMount() {
@@ -13,16 +16,7 @@ export default class GraphExample extends Component {
             400, 
             300
         )
-        // # Add dummy nodes.
-        g.addNode('1')
-        g.addNode('2')
-        g.addNode('3')
-        g.addLink('1', '2')
-        g.addLink('2', '3')
-        g.addLink('3', '1')
-        // # Start draw and physics update loop.
-        g.apply()
-
+        g.replaceGraphUsingTitle()
         this.setState({
             d3graph: g,
         })
@@ -30,9 +24,6 @@ export default class GraphExample extends Component {
     // # Button action: Add a new graph node.
     addToGraph = () => {
         let g = this.state.d3graph
-        g.addNode('4')
-        g.addLink('4', '3')
-        g.apply()
     }
 
     render() {
