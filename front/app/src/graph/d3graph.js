@@ -1,12 +1,13 @@
 
 
 import * as d3 from 'd3'
+import {newGraphFlat} from './utils.js'
 
 // # Name for graph.
 const containerName = 'g'
 
 // # Node settings
-const defaultNodeSize = 5
+const defaultNodeSize = 10
 const defaultNodeColor = '#990099'
 const nodeIdentityProp = 'id'
 
@@ -20,6 +21,8 @@ const defaultLabelOffsetY = 2
 const defaultLabelData = (d) => {
     return d[nodeIdentityProp]
 }
+
+const attemptedNodeCount = 5;
 
 export default class D3Graph {
     constructor(id, width, height) {
@@ -45,6 +48,43 @@ export default class D3Graph {
     addLink(from, to) {
         let newLink = {'source': from, 'target': to }
         this.data.links.push(newLink)
+    }
+
+    // # Replaces current graph with a (potentially)
+    // # new one, where the 'main' node V has <title>
+    // # as a title, while the rest are neighbours of V
+    // # If <title> is not given, then V will be random.
+    replaceGraphUsingTitle = (title=undefined) => {
+        newGraphFlat(attemptedNodeCount, title)
+            .then(res => {
+                // # Clear old.
+                this.data = {'nodes':[], 'links':[]}
+                // # Set new node data..
+                res.titles.forEach(title => {
+                    this.addNode(title)
+                })
+                // # Set edge data.
+                res.graph.forEach(pair => {
+                    this.addLink(
+                        res.titles[pair[0]],
+                        res.titles[pair[1]]
+                    )
+                })
+                // # Reset force, this is a bug workaround.
+                // # Sometimes the force simulation stops
+                // # (for some reason) and must be restarted,
+                // # otherwise new nodes will be stuck at the
+                // # top-left corner. 
+                this.setForceSimulation(400,300)
+                // # Update everything.
+                this.apply()
+            })
+            .catch(rej => console.log(rej))
+    }
+
+    nodeClick = (e, node) => {
+        console.log('clicked:', node.id)
+        this.replaceGraphUsingTitle(node.id)
     }
 
     // # Mounts svg to a html element with name <id>
@@ -99,6 +139,7 @@ export default class D3Graph {
             .selectAll(containerName)
             .data(this.data.nodes)
             .enter().append(containerName)
+            .on('click', this.nodeClick)
         // # Visual.
         nodeGroup.append("circle")
             .attr("r", defaultNodeSize)
