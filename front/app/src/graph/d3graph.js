@@ -25,7 +25,7 @@ const defaultLabelData = (d) => {
 const attemptedNodeCount = 5;
 
 export default class D3Graph {
-    constructor(id, width, height) {
+    constructor(id, width, height, containerCallbacks) {
         this.data = {'nodes':[], 'links':[]}
         this.svg = null
         this.forceSimulation = null
@@ -35,6 +35,8 @@ export default class D3Graph {
         // # Force an initial setting.
         this.setSVG(id, width, height)
         this.setForceSimulation(width, height)
+        // # Keep track of required callbacks.
+        this.containerCallbacks = containerCallbacks
     }
 
     // # Adds a node with <id> to this.graph.
@@ -83,7 +85,7 @@ export default class D3Graph {
     }
 
     nodeClick = (e, node) => {
-        console.log('clicked:', node.id)
+        this.containerCallbacks.callback.nodeClick(e, node)
         this.replaceGraphUsingTitle(node.id)
     }
 
