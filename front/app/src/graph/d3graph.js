@@ -1,7 +1,7 @@
 
 
 import * as d3 from 'd3'
-import {newGraphFlat} from './utils.js'
+import {Node, Graph} from './graphtypes.js'
 
 // # Name for graph.
 const containerName = 'g'
@@ -19,14 +19,15 @@ const defaultLinkColor = '#000000'
 const defaultLabelOffsetX = 4
 const defaultLabelOffsetY = 2
 const defaultLabelData = (d) => {
-    return d[nodeIdentityProp]
+    return d.title
 }
 
 const attemptedNodeCount = 5;
 
 export default class D3Graph {
     constructor(id, width, height, containerCallbacks) {
-        this.data = {'nodes':[], 'links':[]}
+        // this.data = {'nodes':[], 'links':[]}
+        this.data = new Graph(3, 3)
         this.svg = null
         this.forceSimulation = null
         this.linkPrefab = null
@@ -39,54 +40,23 @@ export default class D3Graph {
         this.containerCallbacks = containerCallbacks
     }
 
-    // # Adds a node with <id> to this.graph.
-    addNode(id) {
-        let newNode = { 'id': id }
-        this.data.nodes.push(newNode)
+    async resetGraph() {
+        this.data.nodes = {}
+        this.data.edges = []
+        this.data.addGenerationBySeed().then(_ => this.apply())
+        // this.apply()
     }
 
-    // # Adds a link/edge to this graph such that
-    // #  {source:<from>, 'target':<to>}
-    addLink(from, to) {
-        let newLink = {'source': from, 'target': to }
-        this.data.links.push(newLink)
-    }
-
-    // # Replaces current graph with a (potentially)
-    // # new one, where the 'main' node V has <title>
-    // # as a title, while the rest are neighbours of V
-    // # If <title> is not given, then V will be random.
-    replaceGraphUsingTitle = (title=undefined) => {
-        newGraphFlat(attemptedNodeCount, title)
-            .then(res => {
-                // # Clear old.
-                this.data = {'nodes':[], 'links':[]}
-                // # Set new node data..
-                res.titles.forEach(title => {
-                    this.addNode(title)
-                })
-                // # Set edge data.
-                res.graph.forEach(pair => {
-                    this.addLink(
-                        res.titles[pair[0]],
-                        res.titles[pair[1]]
-                    )
-                })
-                // # Reset force, this is a bug workaround.
-                // # Sometimes the force simulation stops
-                // # (for some reason) and must be restarted,
-                // # otherwise new nodes will be stuck at the
-                // # top-left corner. 
-                this.setForceSimulation(400,300)
-                // # Update everything.
-                this.apply()
-            })
-            .catch(rej => console.log(rej))
-    }
 
     nodeClick = (e, node) => {
+        console.log(node)
         this.containerCallbacks.callback.nodeClick(e, node)
-        this.replaceGraphUsingTitle(node.id)
+        this.data.addGenerationBySeed(node).then(_ => {
+            // this.setForceSimulation()
+            // this.apply()
+            this.setForceSimulation(400, 400)
+            this.apply()
+        })
     }
 
     // # Mounts svg to a html element with name <id>
@@ -103,7 +73,7 @@ export default class D3Graph {
     setForceSimulation(width, height) {
         this.forceSimulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(
-                (d) => { return d[nodeIdentityProp]})
+                (d) => { return d.id})
             )
             .force("charge", d3.forceManyBody())
             .force("center", d3.forceCenter(width / 2, height / 2));
@@ -117,7 +87,7 @@ export default class D3Graph {
             .append(containerName)
             .attr("class", "links")
             .selectAll("line")
-            .data(this.data.links)
+            .data(this.data.formatD3Edges())
             .enter()
             .append("line")
             .attr("stroke-width", defaultLinkWidth)
@@ -139,7 +109,7 @@ export default class D3Graph {
             .append(containerName)
             .attr("class", "nodes")
             .selectAll(containerName)
-            .data(this.data.nodes)
+            .data(Object.values(this.data.nodes))
             .enter().append(containerName)
             .on('click', this.nodeClick)
         // # Visual.
@@ -184,15 +154,17 @@ export default class D3Graph {
                     return 'translate('+d.x+','+d.y+')'
                 })
         }
+   
         // # Apply force: nodes
         this.forceSimulation
-            .nodes(this.data.nodes)
+            .nodes(this.data.formatD3Nodes())
             .on('tick', tickTask)
         
+        if (this.data.edges.length == 0) {return}
         // # Apply force: edges
         this.forceSimulation
             .force('link')
-            .links(this.data.links)
+            .links(this.data.formatD3Edges())
     }
     
     

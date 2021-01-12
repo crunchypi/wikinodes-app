@@ -21,7 +21,7 @@ export default class Graph extends Component {
                 nodeClick:this.containerCallbackOnNodeClick
             }}
         )
-        g.replaceGraphUsingTitle()
+        g.resetGraph()
         this.setState({
             d3graph: g,
         })
@@ -32,15 +32,19 @@ export default class Graph extends Component {
     // # another callback in the container of this component,
     // # which should update the state with html from a node.
     containerCallbackOnNodeClick = (e, node) => {
-        // # Get node from the db by using the title of <node>.
-        nodeSingle(node.id, false)
-            .then(res => {
-                // # Bubble up.
-                this.props.updateSideBar(res[0].html)
-            })
-            .catch(rej => {
-                console.log(rej)
-            })
+        // # Add html to node if it has none, then
+        // # use the callback to present that html.
+        if (node.html == "") {
+            nodeSingle(node.title, false)
+                .then(res => {
+                    // # Assign html in case the node is
+                    // # used again at a later point.
+                    node.html = res[0].html
+                    this.props.updateSideBar(node.html)
+                })
+        } else {
+            this.props.updateSideBar(node.html)
+        }
     }
     
     render() {
