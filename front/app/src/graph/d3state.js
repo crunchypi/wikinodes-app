@@ -12,7 +12,7 @@ export default class D3State {
         // # Accessed with this div tag.
         this.divID = divID
 		
-		// # Graph state.
+        // # Graph state.
         this.data = new Graph()
 
         // # State of D3js prefab objects.
