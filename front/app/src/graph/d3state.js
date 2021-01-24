@@ -8,31 +8,26 @@ import GRAPHCONFIG from './config.js'
 
 
 export default class D3State {
-    constructor(divID, width, height, containerCallbacks) {
+    constructor(divID, containerCallbacks) {
         // # Accessed with this div tag.
         this.divID = divID
+		
+		// # Graph state.
+        this.data = new Graph()
 
-        // # Dimensions of svg(/canvas?)
-        this.width = width
-        this.height = height
-
-        // # State of prefab objects.
+        // # State of D3js prefab objects.
         this.svg = null
         this.forceSimulation = null
         this.linkGroup = null
         this.nodeGroup = null
         
-        // # Graph state.
-        this.data = new Graph(
-            GRAPHCONFIG.defaultGraphGenerationCount, 
-            GRAPHCONFIG.defaultGraphNeighbourCount
-        )
         // # Force an initial setting.
         this.setSVG()
         this.setForceSimulation()
         this.setLinkGroup()
         this.setNodeGroup()
-        // # Keep track of required callbacks.
+     
+		// # Keep track of required callbacks.
         this.containerCallbacks = containerCallbacks
     }
 
@@ -56,39 +51,49 @@ export default class D3State {
     setSVG() {
         this.svg = d3prefabs.svg({
             divID:  this.divID,
-            width:  this.width,
-            height: this.height
+            width:  GRAPHCONFIG.graphWidth,
+            height: GRAPHCONFIG.graphHeight
         })
     }
 
     // # Setup of force simulation prefab.
     setForceSimulation() {
-        this.forceSimulation = d3prefabs.forceSimulation({
-            width:      this.width,
-            height:     this.height,
-            nodeCount:  this.data.formatD3Nodes().length
-        })
+		let l = this.data.formatD3Nodes().length
+		this.forceSimulation = d3prefabs.forceSimulation({
+			forceCenterX:		GRAPHCONFIG.graphWidth/2,
+			forceCenterY:		GRAPHCONFIG.graphHeight/2,
+			collisionDistance:	GRAPHCONFIG.nodeSize(l)*1.5,
+			linkDistance:		GRAPHCONFIG.linkDistance(l)
+		})
     }
 
     // # Sets/replaces a new link group.
     setLinkGroup() {
-        this.linkGroup = d3prefabs.linkGroup({
-            svg:            this.svg,
-            edges:          this.data.formatD3Edges(),
-            oldLinkGroup:   this.linkGroup
-        })
+		this.linkGroup = d3prefabs.linkGroup({
+			svg:			this.svg,
+			containerID:	GRAPHCONFIG.d3containerName,
+			oldLinkGroup:	this.linkGroup,
+			edges:			this.data.formatD3Edges(),
+			linkWidth:		GRAPHCONFIG.linkWidth,
+			linkColor:		GRAPHCONFIG.linkColor
+		})
     }
 
     // # Sets/replaces a new node group.
     setNodeGroup() {
-        this.nodeGroup = d3prefabs.nodeGroup({
-            svg:            this.svg,
-            nodes:          this.data.formatD3Nodes(),
-            clickEvent:     this.onNodeClick,
-            oldNodeGroup:   this.nodeGroup,
-            width:          this.width,
-            height:         this.height
-        })
+		let l = this.data.formatD3Nodes().length
+		this.nodeGroup = d3prefabs.nodeGroup({
+			svg:			this.svg,
+			containerID:	GRAPHCONFIG.d3containerName,
+			oldNodeGroup:	this.nodeGroup,
+			nodes:			this.data.formatD3Nodes(),
+			nodeSize:		GRAPHCONFIG.nodeSize(l),
+			nodeColorFunc:	GRAPHCONFIG.nodeColor,
+			clickEvent:		this.onNodeClick,
+			labelOffsetX:	GRAPHCONFIG.labelOffsetX,
+			labelOffsetY:	GRAPHCONFIG.labelOffsetY,
+			labelColor:		GRAPHCONFIG.labelColor
+		})
     }
 
 
@@ -115,7 +120,5 @@ export default class D3State {
             forceSimulation:this.forceSimulation
         })
     }
-    
-    
     
 }

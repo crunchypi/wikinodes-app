@@ -20,68 +20,58 @@ export function svg(config) {
 
 // # Force simulation prefab.
 export function forceSimulation(config) {
-    let {width, height, nodeCount} = config
-
-    return d3.forceSimulation()
-            .force("link",   d3.forceLink().id(n => n.id)
-                .distance(GRAPHCONFIG.defaultLinkDistance(
-                    width, height, nodeCount
-                )))
-            .force("charge", d3.forceManyBody())
-            .force("center", d3.forceCenter(width/2, height/2))
+	let {forceCenterX, forceCenterY, collisionDistance, linkDistance} = config
+	return d3.forceSimulation()
+            .force('charge',  d3.forceManyBody())
+            .force('center',  d3.forceCenter(forceCenterX, forceCenterY))
+			.force('collide', d3.forceCollide(collisionDistance))
+            .force('link',    d3.forceLink().id(n => n.id).distance(linkDistance))
 }
 
 // # Get a new link group (with old appended if it
 // # is provided).
 export function linkGroup(config) {
-    let {svg, edges, oldLinkGroup} = config
-
+    let {svg, containerID, oldLinkGroup, edges, linkWidth, linkColor} = config
     let newLinkGroup = svg
-            .append(GRAPHCONFIG.d3containerName)
+            .append(containerID)
             .attr("class", "links")
             .selectAll("line")
             .data(edges)
             .enter()
             .append("line")
-            .attr("stroke-width", GRAPHCONFIG.defaultLinkWidth)
-            .attr('stroke', GRAPHCONFIG.defaultLinkColor)
+            .attr("stroke-width", linkWidth)
+            .attr('stroke', linkColor)
 
     if (oldLinkGroup != null) {
         newLinkGroup.enter().append(oldLinkGroup)
     }
-    return newLinkGroup
+   return newLinkGroup
 }
 
 // # Get a new node group (with old appended if it
 // # is provided).
 export function nodeGroup(config) {
-    let {svg, nodes, clickEvent,
-            oldNodeGroup, width, height} = config
+	let {svg, containerID, oldNodeGroup, nodes, nodeSize, nodeColorFunc,
+			clickEvent, labelOffsetX, labelOffsetY, labelColor} = config
 
     // # New group.
     let newNodeGroup = svg
-        .append(GRAPHCONFIG.d3containerName)
+        .append(containerID)
         .attr("class", "nodes")
-        .selectAll(GRAPHCONFIG.d3containerName)
+        .selectAll(containerID)
         .data(nodes)
-        .enter().append(GRAPHCONFIG.d3containerName)
+        .enter().append(containerID)
         .on('click', clickEvent)
     // # Visual.
     newNodeGroup.append("circle")
-        .attr("r", GRAPHCONFIG.defaultNodeSize(
-            width, height, nodes.length
-        ))
-        // .attr("fill", GRAPHCONFIG.defaultNodeColor)
-        .attr("fill", (n) => {
-            console.log('xxx', n)
-            return GRAPHCONFIG.defaultNodeColor(n)})
-
+        .attr("r", nodeSize)
+        .attr("fill", nodeColorFunc)
     // # Label.
     newNodeGroup.append("text")
         .text(n => n.title)
-        .attr('x', GRAPHCONFIG.defaultLabelOffsetX)
-        .attr('y', GRAPHCONFIG.defaultLabelOffsetY)
-        .attr('stroke', GRAPHCONFIG.defaultLinkColor)
+        .attr('x', labelOffsetX)
+        .attr('y', labelOffsetY)
+        .attr('stroke', labelColor)
 
     // # Merge with old.
     if (oldNodeGroup != null) {
@@ -113,5 +103,4 @@ export function apply(config) {
     forceSimulation
             .force('link')
             .links(edges)
-
 }
