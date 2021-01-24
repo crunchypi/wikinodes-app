@@ -13,8 +13,6 @@ export default class Graph extends Component {
         let g = new D3State(
             // # graphbody is the target html element.
             '#graphbody', 
-            400, 
-            300,
             // # Pass object containing callbacks to obj.
             {callback: {
                 nodeClick:this.containerCallbackOnNodeClick

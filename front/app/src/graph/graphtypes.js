@@ -1,4 +1,5 @@
 import {nodeSingle, nodeNeigh, nodeRand, checkNeighs} from '../api/api.js'
+import GRAPHCONFIG from './config.js'
 
 // # This file contains code for managing graph data, which
 // # is intended to be used internally by d3js state (found
@@ -47,23 +48,12 @@ export class Edge {
 }
 
 export class Graph {
-    constructor(maxGenCount=2, maxNeigCount=5) {
+    constructor() {
         // # Keys: ID, Vals: Node(s) with those IDs
         this.nodes = {}
         // # Array of Edge(s), which have keys to
         // # the hashmap above.
         this.edges = []
-
-        // # Generations are how long a node has been
-        // # around. The Graph evolves by fetching new
-        // # nodes in batches, and each batch is a gen.
-        // # This is used to flush nodes that are too old.
-        this.maxGenerationCount = maxGenCount
-        // # Each batch, mentioned above, is gotten from
-        // # a Node seed (can be random) and neighbours of
-        // # that seed (neighs are gotten from the database).
-        // # This val determines the amount of neighs.
-        this.maxNeigCount = maxNeigCount
     }
 
     // # Returns all nodes contained in this instance in a
@@ -90,17 +80,16 @@ export class Graph {
             .sort((n, m) => {return n.generation - m.generation})
     }
 
-    // # Removes all expired data, specifically Nodes that have
-    // # exceeded the specified <this.maxGenerationCount> and
-    // # all associated edges. This also ticks the generation
-    // # count in each Node. Toggling <force> to true will
-    // # also removed all preserved Nodes.
+    // # Removes all expired data, specifically Nodes that have exceeded
+	// # the specified <GRAPHCONFIG.graphGenerationCount> and all associated
+	// # edges. This also ticks the generation count in each Node. Toggling
+	// # <force> to true will also removed all preserved Nodes.
     trimGeneration(force=false) {
         // # Trim Node(s) & tick them.
         Object.values(this.nodes).forEach(node => {
             node.generation++
             if (node.preserved == false || force == true) {
-                if (node.generation > this.maxGenerationCount) {
+                if (node.generation > GRAPHCONFIG.graphGenerationCount) {
                     delete this.nodes[node.id]
                 }
             }
@@ -165,12 +154,12 @@ export class Graph {
             seedNode = new Node(rand[0], true)
         }
         newNodes[seedNode.id] = seedNode
-        
+
         // # Optionally get neighbours of seed.
         if (pullNeigh==true) {
             // # Get and add new nodes.
             let neighsOfSeed = await nodeNeigh(
-                seedNode.title, [], this.maxNeigCount
+                seedNode.title, [], GRAPHCONFIG.graphNeighbourCount
             )
             neighsOfSeed.forEach(neigh => {
                 newNodes[neigh.id] = new Node(neigh, false)
@@ -185,6 +174,4 @@ export class Graph {
         // # known. This is left as a TODO.
         await this.recalculateEdges()
     }
-
-
 }
