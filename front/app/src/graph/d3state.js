@@ -6,13 +6,12 @@ import {Graph} from './graphtypes.js'
 import GRAPHCONFIG from './config.js'
 
 
-
 export default class D3State {
     constructor(divID, containerCallbacks) {
         // # Accessed with this div tag.
         this.divID = divID
 		
-		// # Graph state.
+        // # Graph state.
         this.data = new Graph()
 
         // # State of D3js prefab objects.
