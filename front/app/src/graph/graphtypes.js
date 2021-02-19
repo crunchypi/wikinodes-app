@@ -36,6 +36,10 @@ export class Node {
         // # This value is used for special nodes which
         // # should be preserved on generation flushes.
         this.preserved = preserved
+        // # Positions used by d3.
+        this.x = GRAPHCONFIG.graphWidth / 2
+        this.y = GRAPHCONFIG.graphHeight / 2
+
     }
 }
 
