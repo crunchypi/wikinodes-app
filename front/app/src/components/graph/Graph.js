@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-
 import D3State from '../../graph/d3state.js'
-import {nodeSingle} from '../../api/api.js'
-
+import * as api from '../../api/api.js'
 
 export default class Graph extends Component {
     state = {d3state:null, nodeHTML:":O"}
@@ -32,11 +30,11 @@ export default class Graph extends Component {
         // # Add html to node if it has none, then
         // # use the callback to present that html.
         if (node.html == "") {
-            nodeSingle(node.title, false)
+            api.searchHTMLByID(node.id)
                 .then(res => {
                     // # Assign html in case the node is
                     // # used again at a later point.
-                    node.html = res[0].html
+                    node.html = res
                     this.props.updateSideBar(node.html)
                 })
         } else {

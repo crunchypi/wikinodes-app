@@ -1,4 +1,5 @@
-import {nodeSingle, nodeNeigh, nodeRand, checkNeighs} from '../api/api.js'
+//import {nodeSingle, nodeNeigh, nodeRand, checkNeighs} from '../api/api.js'
+import * as api from '../api/api.js'
 import GRAPHCONFIG from './config.js'
 
 // # This file contains code for managing graph data, which
@@ -123,10 +124,10 @@ export class Graph {
         }
         // # Check the cartesian product with the API. This will return
         // # another array of booleans with a 1:1 mapping to <candidates>.
-        let confirmations = await(checkNeighs(candidates.map(pair => {
+        let confirmations = await(api.checkRelsExist(candidates.map(pair => {
             // # Map each candidate such that both elements are titles.
             // # This is required by the api.
-            return [this.nodes[pair[0]].title, this.nodes[pair[1]].title]
+            return [this.nodes[pair[0]].id, this.nodes[pair[1]].id]
         })))
 
         this.edges = candidates
@@ -149,7 +150,7 @@ export class Graph {
         let newNodes = {}
         // # Get random node if seedNode is not set.
         if (seedNode == undefined) {
-            let rand = await nodeRand(1)
+            let rand = await api.randomArticles(1)
             seedNode = rand[0]
             seedNode = new Node(rand[0], true)
         }
@@ -158,8 +159,8 @@ export class Graph {
         // # Optionally get neighbours of seed.
         if (pullNeigh==true) {
             // # Get and add new nodes.
-            let neighsOfSeed = await nodeNeigh(
-                seedNode.title, [], GRAPHCONFIG.graphNeighbourCount
+            let neighsOfSeed = await api.searchArticlesByNeighs(
+                seedNode.id, GRAPHCONFIG.graphNeighbourCount
             )
             neighsOfSeed.forEach(neigh => {
                 newNodes[neigh.id] = new Node(neigh, false)
