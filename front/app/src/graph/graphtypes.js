@@ -39,7 +39,6 @@ export class Node {
         // # Positions used by d3.
         this.x = GRAPHCONFIG.graphWidth / 2
         this.y = GRAPHCONFIG.graphHeight / 2
-
     }
 }
 
@@ -150,14 +149,9 @@ export class Graph {
     // # neighbours (disabled with <pullNeigh>=false) which are 
     // # found by the api. This method also recalculates all edges
     // # at the end (and ticks generations).
-    async addGenerationBySeed(seedNode=undefined, pullNeigh=true) {
+    async addInitialGenerationBySeedNode(seedNode, pullNeigh=true) {
         let newNodes = {}
-        // # Get random node if seedNode is not set.
-        if (seedNode == undefined) {
-            let rand = await api.randomArticles(1)
-            seedNode = rand[0]
-            seedNode = new Node(rand[0], true)
-        }
+
         newNodes[seedNode.id] = seedNode
 
         // # Optionally get neighbours of seed.
@@ -179,4 +173,17 @@ export class Graph {
         // # known. This is left as a TODO.
         await this.recalculateEdges()
     }
+
+    async addInitialGeneration(nodeID=undefined, nodeTitle=undefined, pullNeigh=true) {
+        if (nodeID == undefined && nodeTitle == undefined) {
+            let randResp = await api.randomArticles(1)
+            nodeID = randResp[0].id
+            nodeTitle = randResp[0].title
+        }
+
+        let seedNode = new Node({id:nodeID, title:nodeTitle}, true)
+        await this.addInitialGenerationBySeedNode(seedNode, pullNeigh)
+    }
 }
+
+

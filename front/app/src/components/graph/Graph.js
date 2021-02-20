@@ -3,7 +3,7 @@ import D3State from '../../graph/d3state.js'
 import * as api from '../../api/api.js'
 
 export default class Graph extends Component {
-    state = {d3state:null, nodeHTML:":O"}
+    state = {d3state:null}
 
     // # Sets up d3graph in state with a rand graph.
     componentDidMount() {
@@ -20,6 +20,37 @@ export default class Graph extends Component {
         this.setState({
             d3state: g,
         })
+        // # Register self for callback in the search
+        // # box such that new text will search a new
+        // # node and reset the graph.
+        let {callbackManager} = this.props
+        callbackManager.registerObserver(
+            // # Subject cls and func names.
+            "SearchBar",
+            "done",
+            // # Ref to self and current func name.
+            this,
+            "componentDidMount",
+            // # Callback which searches for a node
+            // # in the backend, using the searchbar
+            // # text, then resets the graph with 
+            // # that new node.
+            (txt) => {
+                api.searchArticlesByContent(txt, 5)
+                    .then(resp => {
+                        if (resp.length != 0) {
+                            // @ Issue: There is currently (at
+                            // @ the time this line was written)
+                            // @ an issue: A new graph can only
+                            // @ have one seed node.
+                            let d = resp[0] // # Data(shorthand)
+                            g.resetGraphUsingNode(d.id, d.title)
+                                .then(res=>console.log(res))
+                                .catch(rej=>console.log(rej))
+                        }
+                    })
+            }
+        )
     }
 
     // # Callback that is meant to be called from D3Graph

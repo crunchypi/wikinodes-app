@@ -3,6 +3,7 @@ import './App.css';
 import Graph from './components/graph/Graph'
 import WikiBox from './components/wikibox/WikiBox'
 import ConfigBox from './components/cfgbox/ConfigBox.js'
+import SearchBar from './components/searchbar/SearchBar.jsx'
 
 import CallbackManager from './callbackmanager/callbackmanager.js'
 // # Dirty cheat.
@@ -17,7 +18,8 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className="App"> 
+      <div className="App">
+        <SearchBar callbackManager={this.state.callbackManager}/>
 		<div style={style}>
         	<Graph callbackManager={this.state.callbackManager}/>
 			<ConfigBox/>
