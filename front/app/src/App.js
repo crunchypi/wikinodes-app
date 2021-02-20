@@ -4,6 +4,7 @@ import Graph from './components/graph/Graph'
 import WikiBox from './components/wikibox/WikiBox'
 import ConfigBox from './components/cfgbox/ConfigBox.js'
 
+import CallbackManager from './callbackmanager/callbackmanager.js'
 // # Dirty cheat.
 const style = {
   display: 'flex',
@@ -12,25 +13,17 @@ const style = {
 
 
 export default class App extends Component {
-  state = {sideBarHTML:''}
-
-  // # Send txt from compontents: Graph->WikiBox 
-  updateSideBar = (txt) => {
-    this.setState({sideBarHTML:txt})
-  }
+  state = {callbackManager: new CallbackManager()}
 
   render() {
     return (
       <div className="App"> 
 		<div style={style}>
-        	<Graph updateSideBar={this.updateSideBar}/>
+        	<Graph callbackManager={this.state.callbackManager}/>
 			<ConfigBox/>
 		</div>
-        <WikiBox html={this.state.sideBarHTML}/>
+        <WikiBox callbackManager={this.state.callbackManager}/>
       </div>
     )
   }
 }
-
-
-
