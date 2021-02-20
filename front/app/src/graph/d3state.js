@@ -34,13 +34,28 @@ export default class D3State {
     async resetGraph() {
         this.data.nodes = {}
         this.data.edges = []
-        this.data.addGenerationBySeed().then(_ => this.apply())
+        this.data.addInitialGeneration()
+            .then(_ => {
+                this.setForceSimulation()
+                this.apply()
+            })
     }
 
+    // # Reset graph with specified seed data.
+    async resetGraphUsingNode(nodeID, nodeTitle) {
+        this.data.nodes = {}
+        this.data.edges = []
+        this.data.addInitialGeneration(nodeID, nodeTitle)
+            .then(_ => {
+                this.setForceSimulation()
+                this.apply()
+            })
+    }
+ 
     // # Event for node click.
     onNodeClick = (e, node) => {
         this.containerCallbacks.callback.nodeClick(e, node)
-        this.data.addGenerationBySeed(node).then(_ => {
+        this.data.addInitialGenerationBySeedNode(node).then(_ => {
             this.setForceSimulation()
             this.apply()
         })
@@ -104,8 +119,6 @@ export default class D3State {
         // # This prevents node duplication.
         this.svg.selectAll(
             GRAPHCONFIG.d3containerName).remove()
-        // # Why was this here? Afraid to remove it :<
-        // this.svg.selectAll(containerName).remove()
 
         // # Set new.
         this.setLinkGroup()
