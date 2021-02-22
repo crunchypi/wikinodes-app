@@ -11,7 +11,7 @@ let GRAPHCONFIG = {
     // # Used to identify groups(nodes, links, etc)
     d3containerName: 'g',
     // # Background color for whole d3 thing.
-    svgBackgroundColor: '#202020',
+    svgBackgroundColor: '#1f1d2b', // #202020',
 	// # Graph dimensions.
 	graphWidth: 400,
 	graphHeight: 400,

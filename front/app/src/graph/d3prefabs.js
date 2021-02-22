@@ -10,7 +10,7 @@ export function svg(config) {
         .append('svg')
         .attr('width', width)
         .attr('height', height)
-        .style('border', '1px solid black')
+        //.style('border', '1px solid black')
     svg.append('rect')
         .attr('width', width)
         .attr('height', height)
