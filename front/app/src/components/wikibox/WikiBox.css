@@ -1,0 +1,23 @@
+.article {
+    min-height: 600px;
+    width: 50%;
+    overflow: scroll;
+    padding: 10px;
+    background: #1f1d2b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    margin: 10px;
+  }
+
+  @media screen and (max-width: 999px) {
+   
+    .article {
+      width: 100%;
+      margin: 10px;
+      padding-right: 30px;
+      align-items: center;
+    }
+    
+  }

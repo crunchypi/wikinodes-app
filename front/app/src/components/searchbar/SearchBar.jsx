@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import "./SearchBar.css"
 
 export default class SearchBar extends Component {
     state = {currentText: ""}
@@ -15,9 +16,11 @@ export default class SearchBar extends Component {
 
     textInput = () => {
         return (
+            <div className="search-bar">
             <input
                 type="text"
                 className="form-control"
+                placeholder="Search your topic!"
                 // # Update state to current field value.
                 onChange={(e)=>{this.setState({currentText:e.target.value})}}
                 // # On enter; call this.done.
@@ -27,11 +30,12 @@ export default class SearchBar extends Component {
                     }
                 }}
             />
+        </div>
         )
     }
     render() {
         return (
-            <div>
+            <div className="search-container">
                 {this.textInput()}
             </div>
         )
