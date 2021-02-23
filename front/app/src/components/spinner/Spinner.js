@@ -4,12 +4,12 @@ import "./Spinner.css";
 
 
     // toggle the element visibility
-    let toggle = (elem) => {
-        elem.classList.toggle('hidden');
-    }
+    //let toggle = (elem) => {
+     //   elem.classList.toggle('hidden');
+    //}
     
     // toggle
-    toggle(document.querySelector('.loader'));
+    //toggle(document.querySelector('.loader'));
 
 
 
