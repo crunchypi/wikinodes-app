@@ -36,4 +36,11 @@
     color: #fff;
   }
 
-  /* apply red outline if nothing found*/
+    /* apply red outline if nothing found*/
+ .red-alert {
+    border: 2px;
+    border-color: red;
+    z-index: 4444;
+ }
+  
+

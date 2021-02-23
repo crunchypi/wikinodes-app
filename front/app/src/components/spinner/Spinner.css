@@ -1,10 +1,12 @@
 .loader {
     color: #ffffff;
-    font-size: 10px;
+    font-size: 4px;
     width: 1em;
     height: 1em;
+    float: right;
     border-radius: 50%;
     position: relative;
+    right: 40px;
     text-indent: -9999em;
     -webkit-animation: load4 1.3s infinite linear;
     animation: load4 1.3s infinite linear;

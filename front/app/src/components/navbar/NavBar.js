@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./NavBar.css";
+import ConfigBox from "../cfgbox/ConfigBox.js";
 
 
 export default class NavBar extends Component {
@@ -19,7 +20,7 @@ render() {
             <i className="fa fa-caret-down"></i>
           </button>
           <div className="dropdown-content">
-            <a href="./app" >Option 1</a>
+            <ConfigBox />
            
           </div>
         </div>

@@ -11,7 +11,7 @@ import "./Spinner.css";
     // toggle
     //toggle(document.querySelector('.loader'));
 
-
+    //if nothing found add class red-alert to search bar
 
 
 export default class Spinner extends Component {
