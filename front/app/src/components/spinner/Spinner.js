@@ -17,7 +17,8 @@ import "./Spinner.css";
 export default class Spinner extends Component {
 
     //if graph not rendered show spinner
-    //how to place spinner 'on top' of d3 svg canvas?
+    //how to place spinner 'on top' of d3 svg canvas? 
+    //should be centred based on parent (graph box) css
 
 render() {
     return (

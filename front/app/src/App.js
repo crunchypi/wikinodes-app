@@ -7,25 +7,23 @@ import SearchBar from "./components/searchbar/SearchBar.jsx";
 
 import CallbackManager from "./callbackmanager/callbackmanager.js";
 import Spinner from "./components/spinner/Spinner";
+import NavBar from "./components/navbar/NavBar";
 
 export default class App extends Component {
   state = { callbackManager: new CallbackManager() };
 
   render() {
     return (
-      <div className="App navbar">
-        <div className="title">WikiNodes</div>
+      <div className="App">
+        <NavBar />
         <SearchBar callbackManager={this.state.callbackManager} />
         <div className="main-container">
           <div className="graph-box">
-          <Spinner />
+            <Spinner />
             <Graph callbackManager={this.state.callbackManager} />
-            
           </div>
-
           <WikiBox callbackManager={this.state.callbackManager} />
         </div>
-
         <ConfigBox />
       </div>
     );
