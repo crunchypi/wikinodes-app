@@ -17,9 +17,23 @@ export default class SearchBar extends Component {
     callbacks.forEach((f) => f(this.state.currentText));
   };
 
+    //if nothing found in search add class red-alert alongside className search-bar
+    //in the first div
+
+    //while text search retrieval in action show loading animation - add <Spinner />
+    // toggle the element visibility
+    //let toggle = (elem) => {
+        //   elem.classList.toggle('hidden');
+    //}
+
+    // toggle
+    //toggle(document.querySelector('.loader'));
+
+  
+
   textInput = () => {
     return (
-      <div className="search-bar">
+      <div className="search-bar red-alert">
         <input
           type="text"
           className="form-control"
