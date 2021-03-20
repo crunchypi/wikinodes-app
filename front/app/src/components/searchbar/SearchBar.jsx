@@ -29,11 +29,15 @@ export default class SearchBar extends Component {
     // toggle
     //toggle(document.querySelector('.loader'));
 
+    // let resultFound = true;
+    // let style = resultFound ? {}: 
+    //   {border: '3px solid red' ,
+    //    borderRadius: '8px'}
   
 
   textInput = () => {
     return (
-      <div className="search-bar red-alert">
+      <div className="search-bar" style={style}>
         <input
           type="text"
           className="form-control"
