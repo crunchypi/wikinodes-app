@@ -3,7 +3,7 @@ import "./Spinner.css";
 
 
 export default class Spinner extends Component {
-state = {loading:true};
+state = {loading:false};
 
 render() {
     return (
