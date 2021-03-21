@@ -42,13 +42,8 @@
         outline: none;
     }
 
-/* apply red outline if nothing found*/
 .red-alert {
   border: 3px solid red;
   border-radius: 8px;
 }
 
-.red-alert:active {
-  border: 2px solid red;
-  border-radius: 8px;
-}

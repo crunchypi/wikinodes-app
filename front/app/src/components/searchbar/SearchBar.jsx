@@ -4,7 +4,8 @@ import "../spinner/Spinner.css";
 import "./SearchBar.css";
 
 export default class SearchBar extends Component {
-  state = { currentText: "" };
+  state = { currentText: "", 
+            resultReturned: true};
 
   done = () => {
     let { callbackManager } = this.props;
@@ -17,8 +18,7 @@ export default class SearchBar extends Component {
     callbacks.forEach((f) => f(this.state.currentText));
   };
 
-    //if nothing found in search add class red-alert alongside className search-bar
-    //in the first div
+    //red alert outline if nothing found in search is defined in state
 
     //while text search retrieval in action show loading animation - add <Spinner />
     // toggle the element visibility
@@ -29,15 +29,9 @@ export default class SearchBar extends Component {
     // toggle
     //toggle(document.querySelector('.loader'));
 
-    // let resultFound = true;
-    // let style = resultFound ? {}: 
-    //   {border: '3px solid red' ,
-    //    borderRadius: '8px'}
-  
-
   textInput = () => {
     return (
-      <div className="search-bar" style={style}>
+      <div className={this.state.resultReturned ? 'search-bar' : 'search-bar red-alert'}>
         <input
           type="text"
           className="form-control"
