@@ -17,20 +17,10 @@ export default class SearchBar extends Component {
     // # Send to all observers.
     callbacks.forEach((f) => f(this.state.currentText));
   };
-
-    //red alert outline if nothing found in search is defined in state
-
-    //while text search retrieval in action show loading animation - add <Spinner />
-    // toggle the element visibility
-    //let toggle = (elem) => {
-        //   elem.classList.toggle('hidden');
-    //}
-
-    // toggle
-    //toggle(document.querySelector('.loader'));
-
+   
   textInput = () => {
     return (
+      //red alert outline if nothing found in search is defined in state
       <div className={this.state.resultReturned ? 'search-bar' : 'search-bar red-alert'}>
         <input
           type="text"

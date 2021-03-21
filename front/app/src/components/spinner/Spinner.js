@@ -3,10 +3,12 @@ import "./Spinner.css";
 
 
 export default class Spinner extends Component {
+state = {loading:true};
 
 render() {
     return (
-        <div className='loader'>...loading....</div>	
+        //no spinner css applied if loading != true
+        <div className={this.state.loading ? 'loader' : ''}></div>	
     );
   }
 
