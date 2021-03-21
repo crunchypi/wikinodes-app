@@ -11,10 +11,10 @@ let GRAPHCONFIG = {
     // # Used to identify groups(nodes, links, etc)
     d3containerName: 'g',
     // # Background color for whole d3 thing.
-    svgBackgroundColor: '#202020',
+    svgBackgroundColor: '#202020', //#1f1d2b', // #202020',
 	// # Graph dimensions.
-	graphWidth: 400,
-	graphHeight: 400,
+	graphWidth: 500,
+	graphHeight: 500,
     // # ------------ nodes ------------------------------ # //
     // # Dynamic node size. <w> & <h> are width and height
     // # of the d3 svg. <c> is the total node count.
