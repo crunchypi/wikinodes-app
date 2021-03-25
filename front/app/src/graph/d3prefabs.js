@@ -17,8 +17,8 @@ export function svg(config) {
         .attr('fill', GRAPHCONFIG.svgBackgroundColor)
     // global zoom & ban behavior.
     let zoom = d3.zoom()
-        .scaleExtent([1,8])
-        .on('zoom', (e) => {
+        .scaleExtent([1,1])     // change at your own risk -- seems buggy with
+        .on('zoom', (e) => {    // other values (super jittery and other issues).
             svg.attr('transform', e.transform)
         })
     svg.call(zoom)
