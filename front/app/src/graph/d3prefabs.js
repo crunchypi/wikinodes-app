@@ -15,6 +15,13 @@ export function svg(config) {
         .attr('width', width)
         .attr('height', height)
         .attr('fill', GRAPHCONFIG.svgBackgroundColor)
+    // global zoom & ban behavior.
+    let zoom = d3.zoom()
+        .scaleExtent([1,8])
+        .on('zoom', (e) => {
+            svg.attr('transform', e.transform)
+        })
+    svg.call(zoom)
     return svg
 }
 
@@ -99,57 +106,6 @@ export function nodeGroup(config) {
     }
     return newNodeGroup
 }
-
-//export function nodeGroup(config) {
-//	let {svg, containerID, oldNodeGroup, nodes, nodeSize, nodeColorFunc,
-//			clickEvent, labelOffsetX, labelOffsetY, labelColor, linkGroup} = config
-//
-//    // # New group.
-//    let newNodeGroup = svg
-//        .append(containerID)
-//        .attr("class", "nodes")
-//        .selectAll(containerID)
-//        .data(nodes)
-//        .enter().append(containerID)
-//        .on('click', clickEvent)
-//        .on('mouseover', (_, n) => {
-//            newNodeGroup
-//                .select('circle')
-//                .attr("stroke", m => n.id == m.id? '#fff': '#000')
-//            newNodeGroup
-//                .select('text')
-//                .attr('stroke', m => n.id == m.id? '#fff': '#000')
-//            let x = linkGroup.select('links').select('line')
-//            x.attr('stroke', (x, y) => {
-//                return '#f00'
-//            })
-//        })
-//        .on('mouseout', (_, n) => {
-//            newNodeGroup
-//                .select('circle')
-//                .attr('stroke', _ => {'#000'})
-//            newNodeGroup
-//                .select('text')
-//                .attr('stroke', labelColor)
-//         })
-//    // # Visual.
-//    newNodeGroup.append("circle")
-//        .attr("r", nodeSize)
-//        .attr("fill", nodeColorFunc)
-//    // # Label.
-//    newNodeGroup.append("text")
-//        .text(n => n.title)
-//        .attr('x', labelOffsetX)
-//        .attr('y', labelOffsetY)
-//        .attr('stroke', labelColor)
-//
-//    // # Merge with old.
-//    if (oldNodeGroup != null) {
-//        newNodeGroup.enter().append(oldNodeGroup)
-//    }
-//    return newNodeGroup
-//}
-//
 
 // # Starts rendering and physics loop.
 export function apply(config) {
