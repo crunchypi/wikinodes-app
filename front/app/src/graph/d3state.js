@@ -19,6 +19,11 @@ export default class D3State {
         this.forceSimulation = null
         this.linkGroup = null
         this.nodeGroup = null
+
+        //state of graph wrapper for responsive sizing behaviour
+        this.graphWrapper = [500,500] //default state?
+        this.resizeWrapper()
+        this.resizeAction()
         
         // # Force an initial setting.
         this.setSVG()
@@ -69,6 +74,16 @@ export default class D3State {
             height: GRAPHCONFIG.graphHeight
         })
     }
+
+    resizeWrapper(){
+        d3.select('graph-wrapper').on("resize", resizeAction);
+    }
+
+    resizeAction() {
+        width = window.innerWidth, height = window.innerHeight;
+        svg.attr("width", width).attr("height", height);
+        force.size([width, height]).resume();
+      }
 
     // # Setup of force simulation prefab.
     setForceSimulation() {

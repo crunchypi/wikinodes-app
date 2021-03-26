@@ -18,7 +18,7 @@ export default class App extends Component {
         <NavBar />
         <SearchBar callbackManager={this.state.callbackManager} />
         <div className="main-container">
-          <div className="graph-box">
+          <div className="graph-box" id="graph-wrapper">
             <Graph callbackManager={this.state.callbackManager} />
           </div>
           <WikiBox callbackManager={this.state.callbackManager} />
