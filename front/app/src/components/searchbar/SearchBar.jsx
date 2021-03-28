@@ -4,48 +4,51 @@ import "../spinner/Spinner.css";
 import "./SearchBar.css";
 
 export default class SearchBar extends Component {
-  state = { currentText: "", 
-            resultReturned: true};
+    state = { currentText: "", resultReturned: true };
 
-  done = () => {
-    let { callbackManager } = this.props;
-    let callbacks = callbackManager.callbackFuncs(
-      // # Curernt cls and func.
-      "SearchBar",
-      "done"
-    );
-    // # Send to all observers.
-    callbacks.forEach((f) => f(this.state.currentText));
-  };
-   
-  textInput = () => {
-    return (
-      //red alert outline if nothing found in search is defined in state
-      <div className={this.state.resultReturned ? 'search-bar' : 'search-bar red-alert'}>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search your topic!"
-          // # Update state to current field value.
-          onChange={(e) => {
-            this.setState({ currentText: e.target.value });
-          }}
-          // # On enter; call this.done.
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              this.done();
-            }
-          }}
-        />
-      </div>
-    );
-  };
-  render() {
-    return (
-      <div className="search-container">
-        {this.textInput()}
-        <Spinner />
-      </div>
-    );
-  }
+    done = () => {
+        let { callbackManager } = this.props;
+        let callbacks = callbackManager.callbackFuncs(
+            // # Curernt cls and func.
+            "SearchBar",
+            "done"
+        );
+        // # Send to all observers.
+        callbacks.forEach((f) => f(this.state.currentText));
+    };
+
+    textInput = () => {
+        return (
+            //red alert outline if nothing found in search is defined in state
+            <div
+                className={
+                    this.state.resultReturned ? "search-bar" : "search-bar red-alert"
+                }
+            >
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search your topic!"
+                    // # Update state to current field value.
+                    onChange={(e) => {
+                        this.setState({ currentText: e.target.value });
+                    }}
+                    // # On enter; call this.done.
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            this.done();
+                        }
+                    }}
+                />
+            </div>
+        );
+    };
+    render() {
+        return (
+            <div className="search-container">
+                {this.textInput()}
+                <Spinner />
+            </div>
+        );
+    }
 }
