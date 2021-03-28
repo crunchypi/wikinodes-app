@@ -15,6 +15,13 @@ export function svg(config) {
         .attr('width', width)
         .attr('height', height)
         .attr('fill', GRAPHCONFIG.svgBackgroundColor)
+    // global zoom & ban behavior.
+    let zoom = d3.zoom()
+        .scaleExtent([1,1])     // change at your own risk -- seems buggy with
+        .on('zoom', (e) => {    // other values (super jittery and other issues).
+            svg.attr('transform', e.transform)
+        })
+    svg.call(zoom)
     return svg
 }
 
@@ -52,7 +59,7 @@ export function linkGroup(config) {
 // # is provided).
 export function nodeGroup(config) {
 	let {svg, containerID, oldNodeGroup, nodes, nodeSize, nodeColorFunc,
-			clickEvent, labelOffsetX, labelOffsetY, labelColor} = config
+			clickEvent, labelOffsetX, labelOffsetY, labelColor, linkGroup} = config
 
     // # New group.
     let newNodeGroup = svg
@@ -62,6 +69,26 @@ export function nodeGroup(config) {
         .data(nodes)
         .enter().append(containerID)
         .on('click', clickEvent)
+        .on('mouseover', (_, n) => {
+            newNodeGroup
+                .select('circle')
+                .attr("opacity", m => n.id == m.id? 1: 0.2)
+            newNodeGroup
+                .select('text')
+                .attr('opacity', m => n.id == m.id? 1: 0.2)
+            linkGroup.style('opacity', (l, _) => {
+                return l.source.id == n.id || l.target.id == n.id? 1: 0
+            })
+        })
+        .on('mouseout', (_, n) => {
+            newNodeGroup
+                .select('circle')
+                .attr('opacity', _ => 1)
+            newNodeGroup
+                .select('text')
+                .attr('opacity', labelColor)
+            linkGroup.style('opacity', _ => 1)
+         })
     // # Visual.
     newNodeGroup.append("circle")
         .attr("r", nodeSize)

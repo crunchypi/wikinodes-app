@@ -106,7 +106,8 @@ export default class D3State {
 			clickEvent:		this.onNodeClick,
 			labelOffsetX:	GRAPHCONFIG.labelOffsetX,
 			labelOffsetY:	GRAPHCONFIG.labelOffsetY,
-			labelColor:		GRAPHCONFIG.labelColor
+			labelColor:		GRAPHCONFIG.labelColor,
+            linkGroup:      this.linkGroup
 		})
     }
 

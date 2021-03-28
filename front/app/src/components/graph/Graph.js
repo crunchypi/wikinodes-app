@@ -31,24 +31,17 @@ export default class Graph extends Component {
             // # Ref to self and current func name.
             this,
             "componentDidMount",
-            // # Callback which searches for a node
-            // # in the backend, using the searchbar
-            // # text, then resets the graph with 
-            // # that new node.
-            (txt) => {
-                api.searchArticlesByContent(txt, 5)
-                    .then(resp => {
-                        if (resp.length != 0) {
-                            // @ Issue: There is currently (at
-                            // @ the time this line was written)
-                            // @ an issue: A new graph can only
-                            // @ have one seed node.
-                            let d = resp[0] // # Data(shorthand)
-                            g.resetGraphUsingNode(d.id, d.title)
-                                .then(res=>console.log(res))
-                                .catch(rej=>console.log(rej))
-                        }
-                    })
+            // # Callback which accepts wiki data that
+            // # is fetched after using the search bar.
+            // # then resets the graph with 
+            // # that new data (first obj).
+            (wikidata) => {
+                if (wikidata.length != 0) {
+                let d = wikidata[0]
+                g.resetGraphUsingNode(d.id, d.title)
+                    .then(res=>console.log(res))
+                    .catch(rej=>console.log(rej))
+                }
             }
         )
     }
