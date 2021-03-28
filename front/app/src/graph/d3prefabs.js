@@ -1,19 +1,19 @@
 import * as d3 from 'd3'
 import GRAPHCONFIG from './config.js'
 
-
-
 // # Mount and get SVG object.
 export function svg(config) {
-    let {divID, width, height} = config
+//    let {divID, width, height} = config
+let {divID, viewbox} = config
     let svg = d3.select(divID)
         .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        //.style('border', '1px solid black')
-    svg.append('rect')
-        .attr('width', width)
-        .attr('height', height)
+    //     .attr('width', width)
+    //     .attr('height', height)
+    //      svg.append('rect')
+    //     .attr('width', width)
+    //     .attr('height', height)
+        .attr("viewBox", `0 0 500 500`)
+
         .attr('fill', GRAPHCONFIG.svgBackgroundColor)
     return svg
 }
