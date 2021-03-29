@@ -65,19 +65,26 @@ export default class D3State {
     setSVG() {
         this.svg = d3prefabs.svg({
             divID:  this.divID,
-            width:  GRAPHCONFIG.graphWidth,
-            height: GRAPHCONFIG.graphHeight
+            // # On resize event, recalc node size and physics.
+            resizeCallback: () => {
+                this.setNodeGroup()
+                this.setForceSimulation()
+                this.apply()
+            }
         })
     }
 
     // # Setup of force simulation prefab.
     setForceSimulation() {
 		let l = this.data.formatD3Nodes().length
+        let width = this.svg.node().getBoundingClientRect().width
+        let height = this.svg.node().getBoundingClientRect().height
+
 		this.forceSimulation = d3prefabs.forceSimulation({
-			forceCenterX:		GRAPHCONFIG.graphWidth/2,
-			forceCenterY:		GRAPHCONFIG.graphHeight/2,
-			collisionDistance:	GRAPHCONFIG.nodeSize(l)*1.5,
-			linkDistance:		GRAPHCONFIG.linkDistance(l)
+            forceCenterX:		width/2,
+			forceCenterY:		height/2,
+			collisionDistance:	GRAPHCONFIG.nodeSize(l, width, height)*1.5,
+			linkDistance:		GRAPHCONFIG.linkDistance(l, width, height)
 		})
     }
 
@@ -96,12 +103,15 @@ export default class D3State {
     // # Sets/replaces a new node group.
     setNodeGroup() {
 		let l = this.data.formatD3Nodes().length
+        let width = this.svg.node().getBoundingClientRect().width
+        let height = this.svg.node().getBoundingClientRect().height
+
 		this.nodeGroup = d3prefabs.nodeGroup({
 			svg:			this.svg,
 			containerID:	GRAPHCONFIG.d3containerName,
 			oldNodeGroup:	this.nodeGroup,
 			nodes:			this.data.formatD3Nodes(),
-			nodeSize:		GRAPHCONFIG.nodeSize(l),
+			nodeSize:		GRAPHCONFIG.nodeSize(l, width, height),
 			nodeColorFunc:	GRAPHCONFIG.nodeColor,
 			clickEvent:		this.onNodeClick,
 			labelOffsetX:	GRAPHCONFIG.labelOffsetX,

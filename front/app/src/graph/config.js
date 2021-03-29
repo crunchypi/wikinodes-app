@@ -12,20 +12,15 @@ let GRAPHCONFIG = {
     d3containerName: 'g',
     // # Background color for whole d3 thing.
     svgBackgroundColor: '#1f1d2b', // #202020',
-	// # Graph dimensions.
-	graphWidth: 500,
-	graphHeight: 500,
     // # ------------ nodes ------------------------------ # //
     // # Dynamic node size. <w> & <h> are width and height
     // # of the d3 svg. <c> is the total node count.
 	nodeSizeMin: 20,
 	nodeSizeMax: 50,
 	nodeSizeMultiplier: 1,
-    nodeSize: (nodeCount) => {
-		let w = GRAPHCONFIG.graphWidth
-		let h = GRAPHCONFIG.graphHeight
+    nodeSize: (nodeCount, containerWidth, containerHeight) => {
 		let c = clamp(nodeCount, 1, nodeCount)
-		let maxRadius = Math.sqrt(w*h) / c
+		let maxRadius = Math.sqrt(containerWidth*containerHeight) / c
 		let newRadius = maxRadius / 3 * GRAPHCONFIG.nodeSizeMultiplier
 		return clamp(newRadius, GRAPHCONFIG.nodeSizeMin, GRAPHCONFIG.nodeSizeMax)
     },
@@ -60,8 +55,12 @@ let GRAPHCONFIG = {
 	linkDistanceMin: 50,
 	linkDistanceMax: 500,
 	linkDistanceMultiplier: 1,
-    linkDistance: (nodeCount) => {
-		let newSize = GRAPHCONFIG.nodeSize(nodeCount)
+    linkDistance: (nodeCount, containerWidth, containerHeight) => {
+		let newSize = GRAPHCONFIG.nodeSize(
+            nodeCount,
+            containerWidth,
+            containerHeight
+        )
 		return clamp(
 				newSize,
 				GRAPHCONFIG.linkDistanceMin,
