@@ -61,6 +61,17 @@ body {
   background-color: transparent;
 }
 
+.footer{
+  padding: 40px 30px 40px;
+  text-align: right;
+  display: block;
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
 @media screen and (max-width: 999px) {
   .graph-box,
   .main-container {
