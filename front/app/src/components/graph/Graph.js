@@ -20,6 +20,10 @@ export default class Graph extends Component {
         this.setState({
             d3state: g,
         })
+        // # Trigger resize so the graph svg doesn't have to
+        // # rely on a pre-existing size (a bit fiddely).
+        window.dispatchEvent(new Event('resize'));
+
         // # Register self for callback in the search
         // # box such that new text will search a new
         // # node and reset the graph.

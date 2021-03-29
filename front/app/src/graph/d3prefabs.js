@@ -5,16 +5,21 @@ import GRAPHCONFIG from './config.js'
 
 // # Mount and get SVG object.
 export function svg(config) {
-    let {divID, width, height} = config
+    let {divID, resizeCallback} = config
+    // # width&height is not set because pre-existing
+    // # dimensions aren't accurate. Instead, a resize
+    // # event is triggered by the containing React comp.
+    // # The resize event for d3 is defined further down
+    // # in this func.
     let svg = d3.select(divID)
         .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        //.style('border', '1px solid black')
-    svg.append('rect')
-        .attr('width', width)
-        .attr('height', height)
-        .attr('fill', GRAPHCONFIG.svgBackgroundColor)
+
+    d3.select(window)
+        .on("resize", function(e) {
+            svg.attr("width", e.target.innerWidth * 0.9);
+            svg.attr("height", e.target.innerHeight * 0.9);
+            resizeCallback()
+    });
     // global zoom & ban behavior.
     let zoom = d3.zoom()
         .scaleExtent([1,1])     // change at your own risk -- seems buggy with
