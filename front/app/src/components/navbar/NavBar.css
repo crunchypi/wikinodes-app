@@ -1,7 +1,7 @@
   .topnav {
     background: #092756;
     color: #fff;
-    overflow: scroll;
+    overflow:hidden;
     margin: 0;
     display: flex;
   }
