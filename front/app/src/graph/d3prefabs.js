@@ -6,13 +6,17 @@ import GRAPHCONFIG from './config.js'
 // # Mount and get SVG object.
 export function svg(config) {
     let {divID, resizeCallback} = config
+   
+    // # The svg needs a wrapping layer for pan+zoom
+    // # UI because that prevents jitters.
+    let uiLayer = d3.select(divID).append('uiLayer')
+
     // # width&height is not set because pre-existing
     // # dimensions aren't accurate. Instead, a resize
     // # event is triggered by the containing React comp.
     // # The resize event for d3 is defined further down
     // # in this func.
-    let svg = d3.select(divID)
-        .append('svg')
+    let svg = uiLayer.append('svg')
 
     d3.select(window)
         .on("resize", function(e) {
@@ -23,10 +27,10 @@ export function svg(config) {
     // global zoom & ban behavior.
     let zoom = d3.zoom()
         .scaleExtent([1,1])     // change at your own risk -- seems buggy with
-        .on('zoom', (e) => {    // other values (super jittery and other issues).
+        .on('zoom', (e) => {    // other values (zoom isn't centered).
             svg.attr('transform', e.transform)
         })
-    svg.call(zoom)
+    uiLayer.call(zoom)
     return svg
 }
 
