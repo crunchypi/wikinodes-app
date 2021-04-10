@@ -1,29 +1,37 @@
-.article {
+.article-wrapper {
     min-height: 400px;
-    max-height: 100vh;
+    max-height: 599px;
     width: 50%;
-    overflow: scroll;
     padding: 10px;
     background: #1f1d2b;
-    display: flex;
+    display: relative;
     align-items: center;
     justify-content: center;
     border-radius: 15px;
     margin: 10px;
+    overflow: scroll;
   }
 
-  .article a {
+  .article-content {
+    margin-top: auto;
+    margin:10px;
+    padding: 10px;
+  }
+
+  a {
       color: #fff;
+  }
+
+  a:link {
+    color: #87CEFA;
   }
 
   @media screen and (max-width: 999px) {
    
-    .article {
+    .article-wrapper {
       width: 95%;
       margin-left: auto;
       margin-right: auto;
-      align-items: center;
-      display: flex;
     }
     
   }

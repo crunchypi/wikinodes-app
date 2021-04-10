@@ -24,8 +24,8 @@ export default class WikiBox extends Component {
 
   render() {
     return (
-      <div className="article">
-        <div dangerouslySetInnerHTML={{ __html: this.state.content }} />
+    <div className="article-wrapper">
+        <div  className="article-content" dangerouslySetInnerHTML={{ __html: this.state.content }} />
       </div>
     );
   }

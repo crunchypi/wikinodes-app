@@ -61,6 +61,12 @@ export default class SearchBar extends Component {
                         }
                     }}
                 />
+                <button className="search-btn" type="submit"
+                    onClick={(e) => {
+                        this.done();
+                    }}>
+                    <span className="magnify"></span>
+                </button>
             </div>
         );
     };

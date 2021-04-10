@@ -7,7 +7,6 @@ export default class NavBar extends Component {
         return (
             <div className="topnav background-2">
                 <div className="title">WikiNodes (prototype)</div>
-                <a className="git-link" href="https://github.com/crunchypi/wikinodes-server">Github source</a>
                 <div className="dropdown">
                     <button className="dropbtn">
                         Customize
@@ -17,6 +16,8 @@ export default class NavBar extends Component {
                         <ConfigBox />
                     </div>
                 </div>
+                <a className="git-link" href="https://github.com/crunchypi/wikinodes-server">Github source</a>
+
             </div>
         );
     }
