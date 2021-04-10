@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+
+body {
+  font-family: "Raleway", sans-serif;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgba(18, 21, 39, 0.86);
+  margin: 0;
+  width: 100%;
+  height: 70vh;
+}
+
+.graph {
+  color: antiquewhite; 
+  background-color: rgb(6, 5, 19);
+  border-radius: 12px;
+}
+
+.nodes {
+  color: #fff;
+}
+
+.Main {
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 15px;
+  margin: 10px;
+}
+
+.graph-box {
+  padding: 10px;
+  min-height: 400px;
+  max-height: 599px;
+  overflow: hidden;
+  background: #1f1d2b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  margin: 10px;
+  width: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.footer{
+  padding: 40px 30px 40px;
+  text-align: right;
+  display: block;
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 999px) {
+  .graph-box,
+  .main-container {
+    width: 95%;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+  }
+}
